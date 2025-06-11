@@ -40,3 +40,7 @@ a {
     color-scheme: dark;
   }
 }
+body.dark-theme {
+  background-color: #121212;
+  color: #eee;
+}
