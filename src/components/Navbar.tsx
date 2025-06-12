@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import styles from './Navbar.module.css';
 
@@ -7,11 +7,16 @@ export default function Navbar() {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
 
-  const toggleMenu = () => setMobileMenuOpen(!isMobileMenuOpen);
-  const toggleTheme = () => {
-    setDarkMode(!darkMode);
-    document.body.classList.toggle('dark-theme');
-  };
+  useEffect(() => {
+    if (darkMode) {
+      document.body.classList.add('dark-theme');
+    } else {
+      document.body.classList.remove('dark-theme');
+    }
+  }, [darkMode]);
+
+  const toggleMenu = () => setMobileMenuOpen((prev) => !prev);
+  const toggleTheme = () => setDarkMode((prev) => !prev);
 
   return (
     <nav className={styles.navbar}>
@@ -19,15 +24,15 @@ export default function Navbar() {
         <Link href="/">My Blog</Link>
       </div>
 
-      <button onClick={toggleMenu} className={styles.hamburger}>
+      <button
+        onClick={toggleMenu}
+        className={styles.hamburger}
+        aria-label="Toggle menu"
+      >
         ☰
       </button>
 
-      <ul
-        className={`${styles.navLinks} ${
-          isMobileMenuOpen ? styles.showMenu : ''
-        }`}
-      >
+      <ul className={`${styles.navLinks} ${isMobileMenuOpen ? styles.showMenu : ''}`}>
         <li><Link href="/">Home</Link></li>
         <li><Link href="/blog">Blog</Link></li>
         <li><Link href="/about">About</Link></li>
@@ -42,16 +47,17 @@ export default function Navbar() {
           </ul>
         </li>
 
-        <li>
+        <li className={styles.searchItem}>
           <input
             className={styles.search}
             type="text"
             placeholder="Search posts..."
+            aria-label="Search"
           />
         </li>
 
         <li>
-          <button onClick={toggleTheme} className={styles.toggle}>
+          <button onClick={toggleTheme} className={styles.toggle} aria-label="Toggle theme">
             {darkMode ? '🌞' : '🌙'}
           </button>
         </li>
