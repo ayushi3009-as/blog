@@ -1,48 +1,29 @@
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
-import Navbar from '../../../components/Navbar';
+// src/pages/posts/[slug].tsx
+import { getAllPosts, getPostBySlug } from '../../lib/posts';
+import Navbar from '@/components/Navbar';
+import styles from '../../styles/Post.module.css';
 
-export default function PostPage({ frontmatter, content }: any) {
+export default function PostPage({ post }: any) {
   return (
-    <>
+    <div>
       <Navbar />
-      <main style={{ maxWidth: '800px', margin: 'auto', padding: '2rem' }}>
-        <h1>{frontmatter.title}</h1>
-        <p style={{ color: 'gray' }}>{frontmatter.date}</p>
-        <div dangerouslySetInnerHTML={{ __html: content }} />
+      <main className={styles.main}>
+        <h1>{post.frontmatter.title}</h1>
+        <p>{post.content}</p>
       </main>
-    </>
+    </div>
   );
 }
 
 export async function getStaticPaths() {
-  const files = fs.readdirSync(path.join('posts'));
-  const paths = files.map((filename) => ({
-    params: { slug: filename.replace('.md', '') },
+  const posts = getAllPosts();
+  const paths = posts.map((post) => ({
+    params: { slug: post.slug },
   }));
-
-  return {
-    paths,
-    fallback: false,
-  };
+  return { paths, fallback: false };
 }
 
 export async function getStaticProps({ params }: any) {
-  const markdownWithMeta = fs.readFileSync(
-    path.join('posts', params.slug + '.md'),
-    'utf-8'
-  );
-  const { data: frontmatter, content } = matter(markdownWithMeta);
-  const processedContent = await remark().use(html).process(content);
-  const contentHtml = processedContent.toString();
-
-  return {
-    props: {
-      frontmatter,
-      content: contentHtml,
-    },
-  };
+  const post = getPostBySlug(params.slug);
+  return { props: { post } };
 }
