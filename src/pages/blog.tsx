@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { getAllPosts } from '../lib/posts';
-import Navbar from '../components/Navbar';
+import Navbar from '../../components/Navbar';
 
 export default function Blog({ posts }: any) {
   return (

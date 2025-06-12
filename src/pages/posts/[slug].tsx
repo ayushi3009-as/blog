@@ -3,7 +3,7 @@ import path from 'path';
 import matter from 'gray-matter';
 import { remark } from 'remark';
 import html from 'remark-html';
-import Navbar from '../../components/Navbar';
+import Navbar from '../../../components/Navbar';
 
 export default function PostPage({ frontmatter, content }: any) {
   return (
