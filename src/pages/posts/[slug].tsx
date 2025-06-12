@@ -1,7 +1,7 @@
 // src/pages/posts/[slug].tsx
-import { getAllPosts, getPostBySlug } from '../../lib/posts';
+import { getAllPosts, getPostBySlug } from '@/lib/posts';
 import Navbar from '@/components/Navbar';
-import styles from '../../styles/Post.module.css';
+import styles from '@/styles/Post.module.css';
 
 export default function PostPage({ post }: any) {
   return (
